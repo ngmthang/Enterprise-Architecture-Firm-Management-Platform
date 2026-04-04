@@ -1,6 +1,6 @@
 CREATE TABLE consultation_requests(
     id BIGSERIAL PRIMARY KEY,
-    full_name VARCHAR(150) NOT NULL,
+    fullname VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL,
     phone VARCHAR(30),
     project_type VARCHAR(100) NOT NULL,
