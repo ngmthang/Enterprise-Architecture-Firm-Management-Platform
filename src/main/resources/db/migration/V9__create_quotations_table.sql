@@ -2,7 +2,7 @@ CREATE TABLE quotations (
     id BIGSERIAL PRIMARY KEY,
     code VARCHAR(50) NOT NULL,
     project_id BIGINT,
-    consultation_id BIGINT,
+    consultation_request_id BIGINT,
     title VARCHAR(255) NOT NULL,
     status VARCHAR(50) NOT NULL,
     currency VARCHAR(10) NOT NULL,
@@ -29,8 +29,10 @@ CREATE TABLE quotations (
     CONSTRAINT fk_quotations_project
         FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
 
-    CONSTRAINT fk_quotations_consultation
-        FOREIGN KEY (consultation_id) REFERENCES consultations(id) ON DELETE SET NULL,
+    CONSTRAINT consultation_request_id BIGINT,
+    CONSTRAINT fk_quotations_consultation_request
+        FOREIGN KEY (consultation_request_id)
+            REFERENCES consultation_requests(id) ON DELETE SET NULL,
 
     CONSTRAINT chk_quotations_subtotal_non_negative
         CHECK (subtotal_amount >= 0),
