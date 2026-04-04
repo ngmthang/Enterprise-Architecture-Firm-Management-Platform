@@ -6,11 +6,13 @@ import com.example.architectureplatform.project.entity.Project;
 import com.example.architectureplatform.project.exception.ProjectNotFoundException;
 import com.example.architectureplatform.project.repository.ProjectRepository;
 import com.example.architectureplatform.quotation.dto.request.CreateQuotationRequest;
+import com.example.architectureplatform.quotation.dto.request.PublicQuotationResponseRequest;
 import com.example.architectureplatform.quotation.dto.request.UpdateQuotationRequest;
 import com.example.architectureplatform.quotation.dto.request.UpdateQuotationStatusRequest;
 import com.example.architectureplatform.quotation.dto.response.QuotationResponse;
 import com.example.architectureplatform.quotation.entity.Quotation;
 import com.example.architectureplatform.quotation.enums.QuotationStatus;
+import com.example.architectureplatform.quotation.exception.InvalidPublicQuotationResponseException;
 import com.example.architectureplatform.quotation.exception.QuotationAlreadyExistsException;
 import com.example.architectureplatform.quotation.exception.QuotationNotFoundException;
 import com.example.architectureplatform.quotation.mapper.QuotationMapper;
@@ -50,6 +52,28 @@ public class QuotationService {
                 .orElseThrow(() -> new QuotationNotFoundException(publicToken, true));
 
         return quotationMapper.toResponse(quotation);
+    }
+
+    public QuotationResponse respondToPublicQuotation(
+            String publicToken,
+            PublicQuotationResponseRequest request
+    ) {
+        Quotation quotation = quotationRepository.findByPublicToken(publicToken)
+                .filter(Quotation::isActive)
+                .orElseThrow(() -> new QuotationNotFoundException(publicToken, true));
+
+        validatePublicQuotationResponseStatus(request.status());
+
+        if (quotation.getStatus() != QuotationStatus.SENT) {
+            throw new IllegalArgumentException(
+                    "Only quotations with SENT status can be responded to publicly"
+            );
+        }
+
+        quotation.setStatus(request.status());
+
+        Quotation updatedQuotation = quotationRepository.save(quotation);
+        return quotationMapper.toResponse(updatedQuotation);
     }
 
     @Transactional(readOnly = true)
@@ -138,6 +162,12 @@ public class QuotationService {
 
         Quotation updatedQuotation = quotationRepository.save(quotation);
         return quotationMapper.toResponse(updatedQuotation);
+    }
+
+    private void validatePublicQuotationResponseStatus(QuotationStatus status) {
+        if (status != QuotationStatus.ACCEPTED && status != QuotationStatus.REJECTED) {
+            throw new InvalidPublicQuotationResponseException(status);
+        }
     }
 
     private Quotation findQuotationById(Long id) {

@@ -21,6 +21,14 @@ public class QuotationExceptionHandler {
                 .body(ApiResponse.error(exception.getMessage()));
     }
 
+    @ExceptionHandler(InvalidPublicQuotationResponseException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInvalidPublicQuotationResponse(
+            InvalidPublicQuotationResponseException exception
+    ) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(exception.getMessage()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

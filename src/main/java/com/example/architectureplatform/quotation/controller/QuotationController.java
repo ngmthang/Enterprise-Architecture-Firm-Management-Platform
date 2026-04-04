@@ -2,6 +2,7 @@ package com.example.architectureplatform.quotation.controller;
 
 import com.example.architectureplatform.common.response.ApiResponse;
 import com.example.architectureplatform.quotation.dto.request.CreateQuotationRequest;
+import com.example.architectureplatform.quotation.dto.request.PublicQuotationResponseRequest;
 import com.example.architectureplatform.quotation.dto.request.UpdateQuotationRequest;
 import com.example.architectureplatform.quotation.dto.request.UpdateQuotationStatusRequest;
 import com.example.architectureplatform.quotation.dto.response.QuotationResponse;
@@ -30,6 +31,18 @@ public class QuotationController {
         return ApiResponse.success(
                 "Quotation retrieved successfully",
                 quotationService.getPublicQuotationByToken(publicToken)
+        );
+    }
+
+    @Operation(summary = "Respond to public quotation")
+    @PostMapping("/public/{publicToken}/response")
+    public ApiResponse<QuotationResponse> respondToPublicQuotation(
+            @PathVariable String publicToken,
+            @Valid @RequestBody PublicQuotationResponseRequest request
+    ) {
+        return ApiResponse.success(
+                "Quotation response submitted successfully",
+                quotationService.respondToPublicQuotation(publicToken, request)
         );
     }
 

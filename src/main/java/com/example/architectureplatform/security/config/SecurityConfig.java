@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/portfolio-projects/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/consultations").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/quotations/public/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/quotations/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
