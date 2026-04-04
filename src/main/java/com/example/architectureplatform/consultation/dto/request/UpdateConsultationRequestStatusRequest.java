@@ -1,4 +1,10 @@
 package com.example.architectureplatform.consultation.dto.request;
 
-public class UpdateConsultationRequestStatusRequest {
+import com.example.architectureplatform.consultation.enums.ConsultationRequestStatus;
+import jakarta.validation.constraints.NotNull;
+
+public record UpdateConsultationRequestStatusRequest(
+        @NotNull(message = "Status is required")
+        ConsultationRequestStatus status
+) {
 }

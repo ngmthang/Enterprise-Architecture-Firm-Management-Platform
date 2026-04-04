@@ -1,4 +1,8 @@
 package com.example.architectureplatform.payment.exception;
 
-public class PaymentNotFoundException {
+public class PaymentNotFoundException extends RuntimeException {
+
+    public PaymentNotFoundException(Long paymentId) {
+        super("Payment not found with id: " + paymentId);
+    }
 }

@@ -20,6 +20,17 @@ public class ServiceCatalogExceptionHandler {
                 .body(response);
     }
 
+    @ExceptionHandler(ServiceOfferingNotFoundByIdException.class)
+    public ResponseEntity<ApiResponse<Void>> handleServiceOfferingNotFoundById(
+            ServiceOfferingNotFoundByIdException ex
+    ) {
+        ApiResponse<Void> response = ApiResponse.error(ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+
     @ExceptionHandler(ServiceOfferingSlugAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<Void>> handleServiceOfferingSlugAlreadyExists(
             ServiceOfferingSlugAlreadyExistsException ex

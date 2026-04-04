@@ -1,4 +1,9 @@
 package com.example.architectureplatform.payment.enums;
 
-public class PaymentStatus {
+public enum PaymentStatus {
+    PENDING,
+    COMPLETED,
+    FAILED,
+    REFUNDED,
+    CANCELLED
 }

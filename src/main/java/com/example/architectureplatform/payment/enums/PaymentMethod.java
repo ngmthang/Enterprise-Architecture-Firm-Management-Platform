@@ -1,4 +1,11 @@
 package com.example.architectureplatform.payment.enums;
 
-public class PaymentMethod {
+public enum PaymentMethod {
+    CASH,
+    BANK_TRANSFER,
+    CREDIT_CARD,
+    DEBIT_CARD,
+    ONLINE_GATEWAY,
+    CHECK,
+    OTHER
 }

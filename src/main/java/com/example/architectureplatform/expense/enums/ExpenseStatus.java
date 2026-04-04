@@ -1,4 +1,9 @@
 package com.example.architectureplatform.expense.enums;
 
-public class ExpenseStatus {
+public enum ExpenseStatus {
+    PENDING,
+    APPROVED,
+    PAID,
+    REJECTED,
+    CANCELLED
 }

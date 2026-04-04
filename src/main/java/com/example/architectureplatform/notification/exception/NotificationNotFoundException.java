@@ -1,4 +1,8 @@
 package com.example.architectureplatform.notification.exception;
 
-public class NotificationNotFoundException {
+public class NotificationNotFoundException extends RuntimeException {
+
+    public NotificationNotFoundException(Long notificationId) {
+        super("Notification not found with id: " + notificationId);
+    }
 }

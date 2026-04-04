@@ -1,4 +1,8 @@
 package com.example.architectureplatform.expense.exception;
 
-public class ExpenseNotFoundException {
+public class ExpenseNotFoundException extends RuntimeException {
+
+    public ExpenseNotFoundException(Long expenseId) {
+        super("Expense not found with id: " + expenseId);
+    }
 }

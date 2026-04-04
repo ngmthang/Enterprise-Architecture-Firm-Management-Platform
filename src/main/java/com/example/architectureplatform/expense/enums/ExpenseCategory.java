@@ -1,4 +1,14 @@
 package com.example.architectureplatform.expense.enums;
 
-public class ExpenseCategory {
+public enum ExpenseCategory {
+    SALARY,
+    SOFTWARE,
+    EQUIPMENT,
+    OFFICE_RENT,
+    UTILITIES,
+    TRAVEL,
+    MARKETING,
+    MAINTENANCE,
+    TAX,
+    OTHER
 }

@@ -1,0 +1,21 @@
+CREATE TABLE company_profile (
+     id BIGSERIAL PRIMARY KEY,
+     company_name VARCHAR(200) NOT NULL,
+     tagline VARCHAR(255),
+     short_description VARCHAR(500),
+     full_description TEXT,
+     email VARCHAR(150),
+     phone VARCHAR(30),
+     address_line_1 VARCHAR(255),
+     address_line_2 VARCHAR(255),
+     city VARCHAR(100),
+     state VARCHAR(100),
+     postal_code VARCHAR(30),
+     country VARCHAR(100),
+     website_url VARCHAR(500),
+     facebook_url VARCHAR(500),
+     instagram_url VARCHAR(500),
+     linkedin_url VARCHAR(500),
+     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
