@@ -3,6 +3,7 @@ package com.example.architectureplatform.security.config;
 import com.example.architectureplatform.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -15,11 +16,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService,
-                          PasswordEncoder passwordEncoder) {
+    public SecurityConfig(
+            CustomUserDetailsService customUserDetailsService,
+            PasswordEncoder passwordEncoder
+    ) {
         this.customUserDetailsService = customUserDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -41,6 +45,12 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**"
                         ).permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/company-profile").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/service-offerings/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/portfolio-projects/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/consultations").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
