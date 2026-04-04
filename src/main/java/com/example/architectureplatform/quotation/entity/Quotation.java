@@ -37,7 +37,7 @@ public class Quotation {
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "consultation_id")
+    @JoinColumn(name = "consultation_request_id")
     private ConsultationRequest consultation;
 
     @Column(name = "title", nullable = false, length = 255)
