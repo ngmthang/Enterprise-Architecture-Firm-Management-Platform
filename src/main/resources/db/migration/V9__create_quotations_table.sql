@@ -27,35 +27,34 @@ CREATE TABLE quotations (
     CONSTRAINT uk_quotations_public_token UNIQUE (public_token),
 
     CONSTRAINT fk_quotations_project
-        FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
 
-    CONSTRAINT consultation_request_id BIGINT,
     CONSTRAINT fk_quotations_consultation_request
-        FOREIGN KEY (consultation_request_id)
-            REFERENCES consultation_requests(id) ON DELETE SET NULL,
+    FOREIGN KEY (consultation_request_id)
+    REFERENCES consultation_requests(id) ON DELETE SET NULL,
 
     CONSTRAINT chk_quotations_subtotal_non_negative
-        CHECK (subtotal_amount >= 0),
+    CHECK (subtotal_amount >= 0),
 
     CONSTRAINT chk_quotations_tax_non_negative
-        CHECK (tax_amount >= 0),
+    CHECK (tax_amount >= 0),
 
     CONSTRAINT chk_quotations_discount_non_negative
-        CHECK (discount_amount >= 0),
+    CHECK (discount_amount >= 0),
 
     CONSTRAINT chk_quotations_total_non_negative
-        CHECK (total_amount >= 0),
+    CHECK (total_amount >= 0),
 
     CONSTRAINT chk_quotations_valid_until_date
-        CHECK (
-            valid_until IS NULL
-                OR issue_date IS NULL
-                OR valid_until >= issue_date
-            )
+    CHECK (
+        valid_until IS NULL
+            OR issue_date IS NULL
+            OR valid_until >= issue_date
+    )
 );
 
 CREATE INDEX idx_quotations_status ON quotations(status);
 CREATE INDEX idx_quotations_project_id ON quotations(project_id);
-CREATE INDEX idx_quotations_consultation_id ON quotations(consultation_id);
+CREATE INDEX idx_quotations_consultation_request_id ON quotations(consultation_request_id);
 CREATE INDEX idx_quotations_active ON quotations(active);
 CREATE INDEX idx_quotations_client_name ON quotations(client_name);
