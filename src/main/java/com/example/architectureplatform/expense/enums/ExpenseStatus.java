@@ -1,0 +1,4 @@
+package com.example.architectureplatform.expense.enums;
+
+public class ExpenseStatus {
+}
