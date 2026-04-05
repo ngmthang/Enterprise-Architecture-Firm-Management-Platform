@@ -1,14 +1,9 @@
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-COPY src src
-
-RUN ./mvnw clean package -DskipTests
+COPY target/architectureplatform-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/architectureplatform-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]

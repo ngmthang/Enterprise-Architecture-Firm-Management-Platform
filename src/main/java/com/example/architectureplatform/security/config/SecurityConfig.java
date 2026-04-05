@@ -9,7 +9,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -23,29 +22,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return customUserDetailsService;
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/actuator/health",
-                                "/api/v1/auth/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**"
+                                "/api/v1/auth/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/company-profile").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/service-offerings/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/portfolio-projects/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/consultations").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/contact-inquiries").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/quotations/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/quotations/public/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/contact-inquiries").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
