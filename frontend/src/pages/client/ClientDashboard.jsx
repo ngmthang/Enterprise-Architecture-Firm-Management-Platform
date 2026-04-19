@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { projectsAPI, invoicesAPI, quotationsAPI, contractsAPI } from '../../api/services';
+import { projectsAPI, invoicesAPI, quotationsAPI, contractsAPI } from '../../api/services.js';
 
 export default function ClientDashboard() {
     const [data, setData] = useState({ projects: [], invoices: [], quotations: [], contracts: [] });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { projectsAPI, expensesAPI } from '../../api/services';
+import { projectsAPI, expensesAPI } from '../../api/services.js';
 
 export default function ArchitectDashboard() {
     const [projects, setProjects] = useState([]);

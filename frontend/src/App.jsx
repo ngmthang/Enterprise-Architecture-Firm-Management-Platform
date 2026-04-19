@@ -7,6 +7,7 @@ import ClientLayout from './components/client/ClientLayout';
 import HomePage from './pages/public/HomePage';
 import ConsultationPage from './pages/public/ConsultationPage';
 import LoginPage from './pages/admin/LoginPage';
+import ProjectsPage from './pages/admin/ProjectsPage';
 import UnauthorizedPage from './pages/shared/UnauthorizedPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import ArchitectDashboard from './pages/architect/ArchitectDashboard';
@@ -39,7 +40,7 @@ export default function App() {
             <RoleRoute allowedRoles={ADMIN_ROLES}><AdminLayout /></RoleRoute>
           }>
             <Route index element={<DashboardPage />} />
-            <Route path="projects" element={<ComingSoon title="Projects" />} />
+            <Route path="projects" element={<ProjectsPage />} />
             <Route path="quotations" element={<ComingSoon title="Quotations" />} />
             <Route path="contracts" element={<ComingSoon title="Contracts" />} />
             <Route path="invoices" element={<ComingSoon title="Invoices" />} />
