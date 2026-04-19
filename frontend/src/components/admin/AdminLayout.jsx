@@ -11,6 +11,11 @@ const NAV_CONFIG = [
       { path: '/admin/notifications', label: 'Notifications', icon: '◉', roles: [] },
     ],
   },
+  { section: 'Access',
+    items: [
+      { path: '/admin/users', label: 'Users', icon: '◯' },
+    ]
+  },
   {
     section: 'Operations',
     items: [

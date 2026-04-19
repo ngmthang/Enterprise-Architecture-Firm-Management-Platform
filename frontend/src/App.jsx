@@ -22,6 +22,7 @@ import ServicesPage from './pages/admin/ServicesPage';
 import CompanyProfilePage from './pages/admin/CompanyProfilePage';
 import NotificationsPage from './pages/admin/NotificationsPage';
 import DashboardPage from './pages/admin/DashboardPage';
+import UsersPage from './pages/admin/UsersPage';
 import UnauthorizedPage from './pages/shared/UnauthorizedPage';
 import ArchitectDashboard from './pages/architect/ArchitectDashboard';
 import ArchitectProjectsPage from './pages/architect/ArchitectProjectsPage';
@@ -29,6 +30,12 @@ import ArchitectDocumentsPage from './pages/architect/ArchitectDocumentsPage';
 import ArchitectTeamPage from './pages/architect/ArchitectTeamPage';
 import ArchitectExpensesPage from './pages/architect/ArchitectExpensesPage';
 import ClientDashboard from './pages/client/ClientDashboard';
+import ClientProjectsPage from './pages/client/ClientProjectsPage';
+import ClientQuotationsPage from './pages/client/ClientQuotationsPage';
+import ClientContractsPage from './pages/client/ClientContractsPage';
+import ClientInvoicesPage from './pages/client/ClientInvoicesPage';
+import ClientConsultationsPage from './pages/client/ClientConsultationsPage';
+import ClientNotificationsPage from './pages/client/ClientNotificationsPage';
 
 function ComingSoon({ title }) {
   return (
@@ -71,6 +78,7 @@ export default function App() {
             <Route path="company" element={<CompanyProfilePage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="users" element={<UsersPage />} />
           </Route>
 
           <Route path="/architect" element={
@@ -87,12 +95,12 @@ export default function App() {
             <RoleRoute allowedRoles={CLIENT_ROLES}><ClientLayout /></RoleRoute>
           }>
             <Route index element={<ClientDashboard />} />
-            <Route path="projects" element={<ComingSoon title="My Projects" />} />
-            <Route path="quotations" element={<ComingSoon title="My Quotations" />} />
-            <Route path="contracts" element={<ComingSoon title="My Contracts" />} />
-            <Route path="invoices" element={<ComingSoon title="My Invoices" />} />
-            <Route path="consultations" element={<ComingSoon title="My Consultations" />} />
-            <Route path="notifications" element={<ComingSoon title="Notifications" />} />
+            <Route path="projects" element={<ClientProjectsPage />} />
+            <Route path="quotations" element={<ClientQuotationsPage />} />
+            <Route path="contracts" element={<ClientContractsPage />} />
+            <Route path="invoices" element={<ClientInvoicesPage />} />
+            <Route path="consultations" element={<ClientConsultationsPage />} />
+            <Route path="notifications" element={<ClientNotificationsPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
