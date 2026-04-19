@@ -222,3 +222,14 @@ select option { background: var(--bg-elevated); }
   .public-footer { flex-direction: column; text-align: center; }
   .dashboard-tables { grid-template-columns: 1fr; }
 }
+
+/* ── ROLE BADGES ── */
+.sidebar-role-badge { padding: 0.5rem 1.25rem; border-bottom: 1px solid var(--border); }
+.role-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 2px; }
+.role-architect { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+.role-client { background: rgba(14,165,233,0.15); color: #7dd3fc; border: 1px solid rgba(14,165,233,0.3); }
+
+/* ── CLIENT CTA ── */
+.client-cta { margin-top: 2rem; background: var(--bg-surface); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+.client-cta-content h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.25rem; }
+.client-cta-content p { color: var(--text-muted); font-size: 0.9rem; }

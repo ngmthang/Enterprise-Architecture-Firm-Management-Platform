@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import { projectsAPI, invoicesAPI, consultationsAPI, contractsAPI, quotationsAPI } from '../../api/services';
 import useAuthStore from '../../store/authStore';
 
+const ROLE_SUBTITLES = {
+  SUPER_ADMIN: "Here's the full picture of your firm today.",
+  ADMIN: "Here's what's happening with your firm today.",
+  PROJECT_MANAGER: "Here's an overview of your active projects and pipeline.",
+  ARCHITECT: "Here's your design work and portfolio activity.",
+  STAFF: "Here's your activity summary for today.",
+  CLIENT: "Here's the latest on your ongoing engagements.",
+};
+
 function StatCard({ label, value, icon, color, to }) {
   return (
     <Link to={to} className="stat-card" style={{ '--card-accent': color }}>
@@ -62,15 +71,20 @@ export default function DashboardPage() {
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const roles = user?.roles || [];
+  const primaryRole = ['SUPER_ADMIN', 'ADMIN', 'PROJECT_MANAGER', 'ARCHITECT', 'STAFF', 'CLIENT']
+    .find((r) => roles.includes(r));
+  const subtitle = ROLE_SUBTITLES[primaryRole] || "Here's what's happening with your firm today.";
+  const displayName = user?.fullName || user?.email || 'Admin';
 
   return (
     <div className="dashboard-page">
       <div className="dashboard-header">
         <div>
           <h1 className="dashboard-greeting">
-            {greeting}, {user?.fullName || user?.name || 'Admin'}.
+            {greeting}, {displayName}.
           </h1>
-          <p className="dashboard-subtitle">Here's what's happening with your firm today.</p>
+          <p className="dashboard-subtitle">{subtitle}</p>
         </div>
         <div className="dashboard-date">
           {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}

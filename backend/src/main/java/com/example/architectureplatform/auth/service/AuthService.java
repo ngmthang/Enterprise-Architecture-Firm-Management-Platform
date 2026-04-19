@@ -53,6 +53,7 @@ public class AuthService {
 
         return new AuthResponse(
                 userPrincipal.getUsername(),
+                userPrincipal.getFullname(),
                 roles,
                 message,
                 token
