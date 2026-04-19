@@ -8,9 +8,26 @@ import HomePage from './pages/public/HomePage';
 import ConsultationPage from './pages/public/ConsultationPage';
 import LoginPage from './pages/admin/LoginPage';
 import ProjectsPage from './pages/admin/ProjectsPage';
-import UnauthorizedPage from './pages/shared/UnauthorizedPage';
+import ConsultationsPage from './pages/admin/ConsultationsPage';
+import ContactInquiriesPage from './pages/admin/ContactInquiriesPage';
+import TeamMembersPage from './pages/admin/TeamMembersPage';
+import InvoicesPage from './pages/admin/InvoicesPage';
+import QuotationsPage from './pages/admin/QuotationsPage';
+import ContractsPage from './pages/admin/ContractsPage';
+import PaymentsPage from './pages/admin/PaymentsPage';
+import ExpensesPage from './pages/admin/ExpensesPage';
+import ReportsPage from './pages/admin/ReportsPage';
+import PortfolioPage from './pages/admin/PortfolioPage';
+import ServicesPage from './pages/admin/ServicesPage';
+import CompanyProfilePage from './pages/admin/CompanyProfilePage';
+import NotificationsPage from './pages/admin/NotificationsPage';
 import DashboardPage from './pages/admin/DashboardPage';
+import UnauthorizedPage from './pages/shared/UnauthorizedPage';
 import ArchitectDashboard from './pages/architect/ArchitectDashboard';
+import ArchitectProjectsPage from './pages/architect/ArchitectProjectsPage';
+import ArchitectDocumentsPage from './pages/architect/ArchitectDocumentsPage';
+import ArchitectTeamPage from './pages/architect/ArchitectTeamPage';
+import ArchitectExpensesPage from './pages/architect/ArchitectExpensesPage';
 import ClientDashboard from './pages/client/ClientDashboard';
 
 function ComingSoon({ title }) {
@@ -41,29 +58,29 @@ export default function App() {
           }>
             <Route index element={<DashboardPage />} />
             <Route path="projects" element={<ProjectsPage />} />
-            <Route path="quotations" element={<ComingSoon title="Quotations" />} />
-            <Route path="contracts" element={<ComingSoon title="Contracts" />} />
-            <Route path="invoices" element={<ComingSoon title="Invoices" />} />
-            <Route path="payments" element={<ComingSoon title="Payments" />} />
-            <Route path="expenses" element={<ComingSoon title="Expenses" />} />
-            <Route path="consultations" element={<ComingSoon title="Consultations" />} />
-            <Route path="contacts" element={<ComingSoon title="Contact Inquiries" />} />
-            <Route path="team" element={<ComingSoon title="Team Members" />} />
-            <Route path="portfolio" element={<ComingSoon title="Portfolio Projects" />} />
-            <Route path="services" element={<ComingSoon title="Service Offerings" />} />
-            <Route path="company" element={<ComingSoon title="Company Profile" />} />
-            <Route path="reports" element={<ComingSoon title="Reports" />} />
-            <Route path="notifications" element={<ComingSoon title="Notifications" />} />
+            <Route path="quotations" element={<QuotationsPage />} />
+            <Route path="contracts" element={<ContractsPage />} />
+            <Route path="invoices" element={<InvoicesPage />} />
+            <Route path="payments" element={<PaymentsPage />} />
+            <Route path="expenses" element={<ExpensesPage />} />
+            <Route path="consultations" element={<ConsultationsPage />} />
+            <Route path="contacts" element={<ContactInquiriesPage />} />
+            <Route path="team" element={<TeamMembersPage />} />
+            <Route path="portfolio" element={<PortfolioPage />} />
+            <Route path="services" element={<ServicesPage />} />
+            <Route path="company" element={<CompanyProfilePage />} />
+            <Route path="reports" element={<ReportsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
           </Route>
 
           <Route path="/architect" element={
             <RoleRoute allowedRoles={ARCHITECT_ROLES}><ArchitectLayout /></RoleRoute>
           }>
             <Route index element={<ArchitectDashboard />} />
-            <Route path="projects" element={<ComingSoon title="My Projects" />} />
-            <Route path="documents" element={<ComingSoon title="Documents" />} />
-            <Route path="team" element={<ComingSoon title="Team Members" />} />
-            <Route path="expenses" element={<ComingSoon title="Expenses" />} />
+            <Route path="projects" element={<ArchitectProjectsPage />} />
+            <Route path="documents" element={<ArchitectDocumentsPage />} />
+            <Route path="team" element={<ArchitectTeamPage />} />
+            <Route path="expenses" element={<ArchitectExpensesPage />} />
           </Route>
 
           <Route path="/client" element={
