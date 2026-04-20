@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { projectsAPI, expensesAPI } from '../../api/services.js';
+import { projectsAPI, expensesAPI, documentsAPI } from '../../api/services';
+import useAuthStore from '../../store/authStore';
 
 export default function ArchitectDashboard() {
+    const { user } = useAuthStore();
     const [projects, setProjects] = useState([]);
     const [expenses, setExpenses] = useState([]);
+    const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [p, e] = await Promise.allSettled([
+                const [p, e, d] = await Promise.allSettled([
                     projectsAPI.getAll(),
                     expensesAPI.getAll(),
+                    documentsAPI.getAll(),
                 ]);
                 setProjects(p.value?.data?.data || []);
                 setExpenses(e.value?.data?.data || []);
+                setDocuments(d.value?.data?.data || []);
             } finally {
                 setLoading(false);
             }
@@ -23,14 +28,19 @@ export default function ArchitectDashboard() {
         fetchData();
     }, []);
 
-    const activeProjects = projects.filter(p => p.status === 'IN_PROGRESS' || p.status === 'ACTIVE');
-    const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    const displayName = user?.fullname || user?.email || 'there';
+
+    const activeProjects = projects.filter(p => p.status === 'IN_PROGRESS' || p.status === 'PLANNING');
+    const pendingExpenses = expenses.filter(e => e.status === 'PENDING');
+    const totalExpenses = expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
     return (
         <div className="dashboard-page">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="dashboard-greeting">Good day.</h1>
+                    <h1 className="dashboard-greeting">{greeting}, {displayName}.</h1>
                     <p className="dashboard-subtitle">Here's your work overview for today.</p>
                 </div>
                 <div className="dashboard-date">
@@ -61,19 +71,19 @@ export default function ArchitectDashboard() {
                             </div>
                             <span className="stat-arrow">→</span>
                         </Link>
-                        <Link to="/architect/expenses" className="stat-card" style={{ '--card-accent': '#10b981' }}>
-                            <div className="stat-icon">▽</div>
+                        <Link to="/architect/documents" className="stat-card" style={{ '--card-accent': '#0ea5e9' }}>
+                            <div className="stat-icon">▤</div>
                             <div className="stat-info">
-                                <span className="stat-value">{expenses.length}</span>
-                                <span className="stat-label">Expenses</span>
+                                <span className="stat-value">{documents.length}</span>
+                                <span className="stat-label">Documents</span>
                             </div>
                             <span className="stat-arrow">→</span>
                         </Link>
                         <Link to="/architect/expenses" className="stat-card" style={{ '--card-accent': '#f59e0b' }}>
-                            <div className="stat-icon">▤</div>
+                            <div className="stat-icon">▽</div>
                             <div className="stat-info">
-                                <span className="stat-value">${totalExpenses.toLocaleString()}</span>
-                                <span className="stat-label">Total Expenses</span>
+                                <span className="stat-value">{pendingExpenses.length}</span>
+                                <span className="stat-label">Pending Expenses</span>
                             </div>
                             <span className="stat-arrow">→</span>
                         </Link>
@@ -89,13 +99,15 @@ export default function ArchitectDashboard() {
                                 <div className="table-empty">No projects assigned yet</div>
                             ) : (
                                 <table className="dash-table">
-                                    <thead><tr><th>Project</th><th>Code</th><th>Status</th></tr></thead>
+                                    <thead>
+                                    <tr><th>Project</th><th>Code</th><th>Status</th></tr>
+                                    </thead>
                                     <tbody>
-                                    {projects.slice(0, 6).map((p) => (
+                                    {projects.slice(0, 6).map(p => (
                                         <tr key={p.id}>
-                                            <td>{p.name || p.title}</td>
+                                            <td>{p.name}</td>
                                             <td><code>{p.code}</code></td>
-                                            <td><span className={`status-badge status-${p.status?.toLowerCase()}`}>{p.status}</span></td>
+                                            <td><span className={`status-badge status-${p.status?.toLowerCase()}`}>{p.status?.replace(/_/g, ' ')}</span></td>
                                         </tr>
                                     ))}
                                     </tbody>
@@ -112,12 +124,14 @@ export default function ArchitectDashboard() {
                                 <div className="table-empty">No expenses recorded yet</div>
                             ) : (
                                 <table className="dash-table">
-                                    <thead><tr><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
+                                    <thead>
+                                    <tr><th>Title</th><th>Amount</th><th>Status</th></tr>
+                                    </thead>
                                     <tbody>
-                                    {expenses.slice(0, 6).map((e) => (
+                                    {expenses.slice(0, 6).map(e => (
                                         <tr key={e.id}>
-                                            <td>{e.description}</td>
-                                            <td>${e.amount?.toLocaleString()}</td>
+                                            <td>{e.title}</td>
+                                            <td>{e.currency} {Number(e.amount).toLocaleString()}</td>
                                             <td><span className={`status-badge status-${e.status?.toLowerCase()}`}>{e.status}</span></td>
                                         </tr>
                                     ))}

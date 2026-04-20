@@ -19,6 +19,7 @@ export const servicesAPI = {
   getBySlug: (slug) => apiClient.get(`/api/v1/service-offerings/${slug}`),
   create: (data) => apiClient.post('/api/v1/service-offerings', data),
   update: (id, data) => apiClient.put(`/api/v1/service-offerings/${id}`, data),
+  delete: (id) => apiClient.delete(`/api/v1/service-offerings/${id}`),
 };
 
 // Portfolio
@@ -27,6 +28,7 @@ export const portfolioAPI = {
   getBySlug: (slug) => apiClient.get(`/api/v1/portfolio-projects/${slug}`),
   create: (data) => apiClient.post('/api/v1/portfolio-projects', data),
   update: (id, data) => apiClient.put(`/api/v1/portfolio-projects/${id}`, data),
+  delete: (id) => apiClient.delete(`/api/v1/portfolio-projects/${id}`),
 };
 
 // Projects
@@ -37,6 +39,17 @@ export const projectsAPI = {
   create: (data) => apiClient.post('/api/projects', data),
   update: (id, data) => apiClient.put(`/api/projects/${id}`, data),
   updateStatus: (id, data) => apiClient.patch(`/api/projects/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/projects/${id}`),
+};
+
+// Project Documents
+export const documentsAPI = {
+  getAll: () => apiClient.get('/api/v1/project-documents'),
+  getById: (id) => apiClient.get(`/api/v1/project-documents/${id}`),
+  getByProject: (projectId) => apiClient.get(`/api/v1/project-documents/project/${projectId}`),
+  create: (data) => apiClient.post('/api/v1/project-documents', data),
+  update: (id, data) => apiClient.put(`/api/v1/project-documents/${id}`, data),
+  delete: (id) => apiClient.delete(`/api/v1/project-documents/${id}`),
 };
 
 // Team Members
@@ -45,6 +58,7 @@ export const teamAPI = {
   getById: (id) => apiClient.get(`/api/v1/team-members/${id}`),
   create: (data) => apiClient.post('/api/v1/team-members', data),
   update: (id, data) => apiClient.put(`/api/v1/team-members/${id}`, data),
+  delete: (id) => apiClient.delete(`/api/v1/team-members/${id}`),
 };
 
 // Quotations
@@ -54,6 +68,7 @@ export const quotationsAPI = {
   create: (data) => apiClient.post('/api/quotations', data),
   update: (id, data) => apiClient.put(`/api/quotations/${id}`, data),
   updateStatus: (id, data) => apiClient.patch(`/api/quotations/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/quotations/${id}`),
 };
 
 // Contracts
@@ -63,6 +78,7 @@ export const contractsAPI = {
   create: (data) => apiClient.post('/api/contracts', data),
   update: (id, data) => apiClient.put(`/api/contracts/${id}`, data),
   updateStatus: (id, data) => apiClient.patch(`/api/contracts/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/contracts/${id}`),
 };
 
 // Invoices
@@ -72,6 +88,7 @@ export const invoicesAPI = {
   create: (data) => apiClient.post('/api/invoices', data),
   update: (id, data) => apiClient.put(`/api/invoices/${id}`, data),
   updateStatus: (id, data) => apiClient.patch(`/api/invoices/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/invoices/${id}`),
 };
 
 // Payments
@@ -79,7 +96,9 @@ export const paymentsAPI = {
   getAll: () => apiClient.get('/api/v1/payments'),
   getById: (id) => apiClient.get(`/api/v1/payments/${id}`),
   create: (data) => apiClient.post('/api/v1/payments', data),
+  update: (id, data) => apiClient.put(`/api/v1/payments/${id}`, data),
   updateStatus: (id, data) => apiClient.patch(`/api/v1/payments/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/v1/payments/${id}`),
 };
 
 // Consultations
@@ -88,6 +107,7 @@ export const consultationsAPI = {
   getById: (id) => apiClient.get(`/api/v1/consultations/${id}`),
   create: (data) => apiClient.post('/api/v1/consultations', data),
   updateStatus: (id, data) => apiClient.patch(`/api/v1/consultations/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/v1/consultations/${id}`),
 };
 
 // Contact Inquiries
@@ -96,6 +116,7 @@ export const contactAPI = {
   getById: (id) => apiClient.get(`/api/v1/contact-inquiries/${id}`),
   create: (data) => apiClient.post('/api/v1/contact-inquiries', data),
   updateStatus: (id, data) => apiClient.patch(`/api/v1/contact-inquiries/${id}/status`, data),
+  delete: (id) => apiClient.delete(`/api/v1/contact-inquiries/${id}`),
 };
 
 // Expenses
@@ -121,10 +142,19 @@ export const notificationsAPI = {
   getAll: () => apiClient.get('/api/v1/notifications'),
   getByUser: (userId) => apiClient.get(`/api/v1/notifications/user/${userId}`),
   getUnread: (userId) => apiClient.get(`/api/v1/notifications/user/${userId}/unread`),
+  create: (data) => apiClient.post('/api/v1/notifications', data),
   markRead: (id, data) => apiClient.patch(`/api/v1/notifications/${id}/read`, data),
+  markAllRead: (userId) => apiClient.patch(`/api/v1/notifications/user/${userId}/read-all`),
+  delete: (id) => apiClient.delete(`/api/v1/notifications/${id}`),
 };
 
 // Users
 export const usersAPI = {
   getAll: () => apiClient.get('/api/v1/users'),
+  getById: (id) => apiClient.get(`/api/v1/users/${id}`),
+  create: (data) => apiClient.post('/api/v1/users', data),
+  update: (id, data) => apiClient.put(`/api/v1/users/${id}`, data),
+  delete: (id) => apiClient.delete(`/api/v1/users/${id}`),
+  enable: (id) => apiClient.patch(`/api/v1/users/${id}/enable`),
+  disable: (id) => apiClient.patch(`/api/v1/users/${id}/disable`),
 };

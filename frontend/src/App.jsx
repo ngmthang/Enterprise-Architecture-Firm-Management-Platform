@@ -5,6 +5,9 @@ import AdminLayout from './components/admin/AdminLayout';
 import ArchitectLayout from './components/architect/ArchitectLayout';
 import ClientLayout from './components/client/ClientLayout';
 import HomePage from './pages/public/HomePage';
+import PublicPortfolioPage from './pages/public/PublicPortfolioPage';
+import PublicServicesPage from './pages/public/PublicServicesPage';
+import ContactPage from './pages/public/ContactPage';
 import ConsultationPage from './pages/public/ConsultationPage';
 import LoginPage from './pages/admin/LoginPage';
 import ProjectsPage from './pages/admin/ProjectsPage';
@@ -37,15 +40,6 @@ import ClientInvoicesPage from './pages/client/ClientInvoicesPage';
 import ClientConsultationsPage from './pages/client/ClientConsultationsPage';
 import ClientNotificationsPage from './pages/client/ClientNotificationsPage';
 
-function ComingSoon({ title }) {
-  return (
-      <div style={{ padding: '3rem', color: 'var(--text-primary)' }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', marginBottom: '0.5rem' }}>{title}</h2>
-        <p style={{ color: 'var(--text-muted)' }}>This section is ready to be built. API is connected.</p>
-      </div>
-  );
-}
-
 const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN'];
 const ARCHITECT_ROLES = ['ARCHITECT', 'PROJECT_MANAGER', 'STAFF'];
 const CLIENT_ROLES = ['CLIENT'];
@@ -54,12 +48,16 @@ export default function App() {
   return (
       <BrowserRouter>
         <Routes>
+          {/* Public */}
           <Route path="/" element={<HomePage />} />
           <Route path="/consultation" element={<ConsultationPage />} />
-          <Route path="/contact" element={<ConsultationPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/portfolio" element={<PublicPortfolioPage />} />
+          <Route path="/services" element={<PublicServicesPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
+          {/* Admin */}
           <Route path="/admin" element={
             <RoleRoute allowedRoles={ADMIN_ROLES}><AdminLayout /></RoleRoute>
           }>
@@ -81,6 +79,7 @@ export default function App() {
             <Route path="users" element={<UsersPage />} />
           </Route>
 
+          {/* Architect */}
           <Route path="/architect" element={
             <RoleRoute allowedRoles={ARCHITECT_ROLES}><ArchitectLayout /></RoleRoute>
           }>
@@ -91,6 +90,7 @@ export default function App() {
             <Route path="expenses" element={<ArchitectExpensesPage />} />
           </Route>
 
+          {/* Client */}
           <Route path="/client" element={
             <RoleRoute allowedRoles={CLIENT_ROLES}><ClientLayout /></RoleRoute>
           }>
