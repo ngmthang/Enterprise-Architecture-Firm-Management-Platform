@@ -323,6 +323,16 @@ export default function QuotationsPage() {
         }
     };
 
+    const handleDelete = async (id) => {
+        if (!window.confirm('Delete this quotation?')) return;
+        try {
+            await quotationsAPI.delete(id);
+            fetchQuotations();
+        } catch (e) {
+            setError('Failed to delete quotation');
+        }
+    };
+
     const filtered = quotations.filter(q => {
         const matchSearch = !search ||
             q.code?.toLowerCase().includes(search.toLowerCase()) ||
@@ -429,6 +439,7 @@ export default function QuotationsPage() {
                                     <div className="action-btns">
                                         <button className="action-btn" onClick={() => setViewQuotation(q)} title="View">◉</button>
                                         <button className="action-btn" onClick={() => setEditQuotation(q)} title="Edit">✎</button>
+                                        <button className="action-btn action-btn-danger" onClick={() => handleDelete(q.id)} title="Delete">✕</button>
                                     </div>
                                 </td>
                             </tr>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { reportsAPI } from '../../api/services';
 
-const REPORT_TYPES = ['FINANCIAL', 'PROJECT', 'EXPENSE', 'INVOICE', 'PAYMENT', 'CONSULTATION', 'TEAM', 'CUSTOM'];
+const REPORT_TYPES = ['PROJECT_SUMMARY', 'CLIENT_SUMMARY', 'INVOICE_SUMMARY',
+    'PAYMENT_SUMMARY', 'FINANCIAL_SUMMARY', 'TEAM_SUMMARY'];
 
 const emptyForm = {
     name: '', description: '', reportType: 'FINANCIAL',

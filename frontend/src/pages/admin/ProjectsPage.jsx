@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { projectsAPI } from '../../api/services';
 
-const PROJECT_TYPES = ['RESIDENTIAL', 'COMMERCIAL', 'URBAN_PLANNING', 'INTERIOR', 'LANDSCAPE', 'INDUSTRIAL', 'OTHER'];
+const PROJECT_TYPES = ['ARCHITECTURAL_DESIGN', 'LANDSCAPE_DESIGN', 'RENOVATION',
+    'CONSULTATION', 'MASTER_PLANNING', 'INTERIOR_DESIGN'];
 const PROJECT_STATUSES = ['PLANNING', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED'];
 
 const emptyForm = {
@@ -120,10 +121,12 @@ function ProjectForm({ initial, onSubmit, onClose, loading }) {
                         <input name="targetEndDate" type="date" value={form.targetEndDate} onChange={handleChange} />
                     </div>
                 </div>
-                <div className="form-field">
-                    <label>Actual End Date</label>
-                    <input name="actualEndDate" type="date" value={form.actualEndDate} onChange={handleChange} />
-                </div>
+                {initial && (
+                    <div className="form-field">
+                        <label>Actual End Date</label>
+                        <input name="actualEndDate" type="date" value={form.actualEndDate} onChange={handleChange} />
+                    </div>
+                )}
             </div>
 
             <div className="form-section">
@@ -317,7 +320,7 @@ export default function ProjectsPage() {
                                     <div className="cell-title">{p.name}</div>
                                     {p.location && <div className="cell-sub">{p.location}</div>}
                                 </td>
-                                <td><span className="type-badge">{p.projectType?.replace('_', ' ')}</span></td>
+                                <td><span className="type-badge">{p.projectType?.replace(/_/g, ' ')}</span></td>
                                 <td>
                                     <div className="cell-title">{p.clientName}</div>
                                     {p.clientEmail && <div className="cell-sub">{p.clientEmail}</div>}

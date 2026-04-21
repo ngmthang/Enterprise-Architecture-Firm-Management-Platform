@@ -45,7 +45,7 @@ function NotificationForm({ onSubmit, onClose, loading, users }) {
                         <select name="userId" value={form.userId} onChange={handleChange} required>
                             <option value="">Select user...</option>
                             {users.map(u => (
-                                <option key={u.id} value={u.id}>{u.fullName || u.email}</option>
+                                <option key={u.id} value={u.id}>{u.fullname || u.email}</option>
                             ))}
                         </select>
                     </div>

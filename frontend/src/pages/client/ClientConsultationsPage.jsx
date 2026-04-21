@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 import { consultationsAPI } from '../../api/services';
 
+const PROJECT_TYPES = [
+    'ARCHITECTURAL_DESIGN', 'LANDSCAPE_DESIGN', 'RENOVATION',
+    'CONSULTATION', 'MASTER_PLANNING', 'INTERIOR_DESIGN'
+];
+
 const CONTACT_METHODS = ['EMAIL', 'PHONE', 'VIDEO_CALL', 'IN_PERSON'];
 
 const emptyForm = {
-    fullname: '', email: '', phone: '', projectType: '',
+    fullname: '', email: '', phone: '', projectType: 'ARCHITECTURAL_DESIGN',
     projectLocation: '', projectBudget: '', preferredContactMethod: 'EMAIL',
     projectDetails: '',
 };
@@ -35,7 +40,8 @@ function ConsultationForm({ onSubmit, onClose, loading }) {
         e.preventDefault();
         const payload = { ...form };
         if (!payload.phone) delete payload.phone;
-        if (!payload.projectLocation) delete payload.projectLocation;
+        // Always send projectLocation — send empty string if blank to satisfy NOT NULL
+        if (!payload.projectLocation) payload.projectLocation = 'Not specified';
         if (!payload.projectBudget) delete payload.projectBudget;
         onSubmit(payload);
     };
@@ -73,7 +79,9 @@ function ConsultationForm({ onSubmit, onClose, loading }) {
                 <div className="form-row">
                     <div className="form-field">
                         <label>Project Type *</label>
-                        <input name="projectType" value={form.projectType} onChange={handleChange} placeholder="e.g. Residential, Commercial" required />
+                        <select name="projectType" value={form.projectType} onChange={handleChange} required>
+                            {PROJECT_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g, ' ')}</option>)}
+                        </select>
                     </div>
                     <div className="form-field">
                         <label>Budget Range</label>

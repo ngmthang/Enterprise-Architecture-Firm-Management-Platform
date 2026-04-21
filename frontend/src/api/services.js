@@ -44,12 +44,12 @@ export const projectsAPI = {
 
 // Project Documents
 export const documentsAPI = {
-  getAll: () => apiClient.get('/api/v1/project-documents'),
-  getById: (id) => apiClient.get(`/api/v1/project-documents/${id}`),
-  getByProject: (projectId) => apiClient.get(`/api/v1/project-documents/project/${projectId}`),
-  create: (data) => apiClient.post('/api/v1/project-documents', data),
-  update: (id, data) => apiClient.put(`/api/v1/project-documents/${id}`, data),
-  delete: (id) => apiClient.delete(`/api/v1/project-documents/${id}`),
+  getAll: () => apiClient.get('/api/project-documents'),
+  getById: (id) => apiClient.get(`/api/project-documents/${id}`),
+  getByProject: (projectId) => apiClient.get(`/api/project-documents/project/${projectId}`),
+  create: (data) => apiClient.post('/api/project-documents', data),
+  update: (id, data) => apiClient.put(`/api/project-documents/${id}`, data),
+  delete: (id) => apiClient.delete(`/api/project-documents/${id}`),
 };
 
 // Team Members

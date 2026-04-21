@@ -12,7 +12,11 @@ export default function LoginPage() {
     e.preventDefault();
     clearError();
     const result = await login(email, password);
-    if (result.success) navigate(result.redirect);
+    if (result.success) {
+      // Fetch full profile to get real fullname
+      await useAuthStore.getState().fetchProfile();
+      navigate(result.redirect);
+    }
   };
 
   return (

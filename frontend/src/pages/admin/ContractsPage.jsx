@@ -68,12 +68,6 @@ function ContractForm({ initial, onSubmit, onClose, loading }) {
                             {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                         </select>
                     </div>
-                    <div className="form-field">
-                        <label>Currency *</label>
-                        <select name="currency" value={form.currency} onChange={handleChange}>
-                            {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
-                    </div>
                 </div>
                 <div className="form-row">
                     <div className="form-field">
@@ -85,9 +79,17 @@ function ContractForm({ initial, onSubmit, onClose, loading }) {
                         <input name="quotationId" type="number" value={form.quotationId} onChange={handleChange} placeholder="Optional" />
                     </div>
                 </div>
-                <div className="form-field">
-                    <label>Contract Value</label>
-                    <input name="contractValue" type="number" min="0" step="0.01" value={form.contractValue} onChange={handleChange} placeholder="0.00" />
+                <div className="form-row">
+                    <div className="form-field">
+                        <label>Contract Value</label>
+                        <input name="contractValue" type="number" min="0" step="0.01" value={form.contractValue} onChange={handleChange} placeholder="0.00" />
+                    </div>
+                    <div className="form-field">
+                        <label>Currency *</label>
+                        <select name="currency" value={form.currency} onChange={handleChange}>
+                            {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
                 </div>
             </div>
 

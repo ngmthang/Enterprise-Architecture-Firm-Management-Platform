@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { projectsAPI } from '../../api/services';
+import { projectsAPI, documentsAPI } from '../../api/services';
 import apiClient from '../../api/client';
 
-const DOC_TYPES = ['BLUEPRINT', 'CONTRACT', 'REPORT', 'INVOICE', 'PERMIT', 'SPECIFICATION', 'PHOTO', 'OTHER'];
+const DOC_TYPES = ['BLUEPRINT', 'CONTRACT', 'REPORT', 'INVOICE', 'PERMIT', 'SPECIFICATION', 'PHOTO', 'CAD_FILE', 'OTHER'];
 
 const emptyForm = {
     projectId: '', title: '', documentType: 'BLUEPRINT', documentUrl: '',
@@ -26,13 +26,28 @@ function Modal({ title, onClose, children }) {
 
 function DocumentForm({ onSubmit, onClose, loading, projects }) {
     const [form, setForm] = useState(emptyForm);
+    const [uploadMode, setUploadMode] = useState('url'); // 'url' or 'file'
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setSelectedFile(file);
+        setForm(f => ({
+            ...f,
+            fileName: file.name,
+            mimeType: file.type || 'application/octet-stream',
+            fileSizeBytes: file.size,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = { ...form };
         payload.projectId = parseInt(payload.projectId);
@@ -41,7 +56,13 @@ function DocumentForm({ onSubmit, onClose, loading, projects }) {
         if (!payload.fileName) delete payload.fileName;
         if (!payload.mimeType) delete payload.mimeType;
         if (!payload.description) delete payload.description;
-        onSubmit(payload);
+
+        // If file mode but no URL yet, use filename as placeholder URL
+        if (uploadMode === 'file' && selectedFile && !payload.documentUrl) {
+            payload.documentUrl = `uploaded://${selectedFile.name}`;
+        }
+
+        onSubmit(payload, selectedFile);
     };
 
     return (
@@ -66,7 +87,7 @@ function DocumentForm({ onSubmit, onClose, loading, projects }) {
                     <div className="form-field">
                         <label>Document Type *</label>
                         <select name="documentType" value={form.documentType} onChange={handleChange} required>
-                            {DOC_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                            {DOC_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g, ' ')}</option>)}
                         </select>
                     </div>
                 </div>
@@ -75,15 +96,91 @@ function DocumentForm({ onSubmit, onClose, loading, projects }) {
                     <input name="title" value={form.title} onChange={handleChange}
                            placeholder="Floor Plan — Level 1" required />
                 </div>
-                <div className="form-field">
-                    <label>Document URL *</label>
-                    <input name="documentUrl" value={form.documentUrl} onChange={handleChange}
-                           placeholder="https://storage.example.com/doc.pdf" required />
-                </div>
             </div>
 
             <div className="form-section">
-                <div className="form-section-title">File Details</div>
+                <div className="form-section-title">File</div>
+
+                {/* Toggle upload mode */}
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <button type="button"
+                            onClick={() => setUploadMode('file')}
+                            style={{
+                                padding: '0.4rem 1rem', borderRadius: 'var(--radius)', border: '1px solid', cursor: 'pointer',
+                                background: uploadMode === 'file' ? 'var(--accent)' : 'transparent',
+                                color: uploadMode === 'file' ? 'var(--bg-base)' : 'var(--text-muted)',
+                                borderColor: uploadMode === 'file' ? 'var(--accent)' : 'var(--border)',
+                                fontSize: '0.8rem', fontFamily: 'var(--font-mono)',
+                            }}>
+                        ↑ Upload File
+                    </button>
+                    <button type="button"
+                            onClick={() => setUploadMode('url')}
+                            style={{
+                                padding: '0.4rem 1rem', borderRadius: 'var(--radius)', border: '1px solid', cursor: 'pointer',
+                                background: uploadMode === 'url' ? 'var(--accent)' : 'transparent',
+                                color: uploadMode === 'url' ? 'var(--bg-base)' : 'var(--text-muted)',
+                                borderColor: uploadMode === 'url' ? 'var(--accent)' : 'var(--border)',
+                                fontSize: '0.8rem', fontFamily: 'var(--font-mono)',
+                            }}>
+                        🔗 Enter URL
+                    </button>
+                </div>
+
+                {uploadMode === 'file' ? (
+                    <div className="form-field">
+                        <label>Select File</label>
+                        <div style={{
+                            border: '2px dashed var(--border)', borderRadius: 'var(--radius-md)',
+                            padding: '2rem', textAlign: 'center', cursor: 'pointer',
+                            background: selectedFile ? 'var(--accent-dim)' : 'var(--bg-elevated)',
+                            borderColor: selectedFile ? 'var(--accent)' : 'var(--border)',
+                            transition: 'all 0.2s',
+                        }}
+                             onClick={() => document.getElementById('file-input').click()}
+                        >
+                            <input
+                                id="file-input"
+                                type="file"
+                                style={{ display: 'none' }}
+                                onChange={handleFileSelect}
+                                accept=".pdf,.dwg,.dxf,.rvt,.skp,.3dm,.obj,.ifc,.psd,.ai,.png,.jpg,.jpeg,.xlsx,.docx,.pptx,.zip,.rar"
+                            />
+                            {selectedFile ? (
+                                <div>
+                                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✓</div>
+                                    <div style={{ color: 'var(--accent)', fontWeight: 500 }}>{selectedFile.name}</div>
+                                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                                    </div>
+                                    <button type="button"
+                                            onClick={e => { e.stopPropagation(); setSelectedFile(null); setForm(f => ({ ...f, fileName: '', mimeType: '', fileSizeBytes: '' })); }}
+                                            style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.8rem', background: 'none', border: 'none', cursor: 'pointer' }}>
+                                        Remove file
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>↑</div>
+                                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Click to select a file</div>
+                                    <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                                        Supports: PDF, DWG, DXF, RVT, SKP, IFC, images, Office files, ZIP
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+              Note: File will be stored as a reference URL. Contact your admin to set up cloud storage.
+            </span>
+                    </div>
+                ) : (
+                    <div className="form-field">
+                        <label>Document URL *</label>
+                        <input name="documentUrl" value={form.documentUrl} onChange={handleChange}
+                               placeholder="https://storage.example.com/doc.pdf" required={uploadMode === 'url'} />
+                    </div>
+                )}
+
                 <div className="form-row">
                     <div className="form-field">
                         <label>File Name</label>
@@ -95,11 +192,6 @@ function DocumentForm({ onSubmit, onClose, loading, projects }) {
                         <input name="mimeType" value={form.mimeType} onChange={handleChange}
                                placeholder="application/pdf" />
                     </div>
-                </div>
-                <div className="form-field">
-                    <label>File Size (bytes)</label>
-                    <input name="fileSizeBytes" type="number" min="0" value={form.fileSizeBytes}
-                           onChange={handleChange} placeholder="1048576" />
                 </div>
                 <div className="form-field">
                     <label>Description</label>
@@ -117,8 +209,8 @@ function DocumentForm({ onSubmit, onClose, loading, projects }) {
 
             <div className="form-actions">
                 <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
-                <button type="submit" className="btn-primary" disabled={loading}>
-                    {loading ? 'Uploading...' : 'Submit Document →'}
+                <button type="submit" className="btn-primary" disabled={loading || uploading}>
+                    {loading ? 'Submitting...' : 'Submit Document →'}
                 </button>
             </div>
         </form>
@@ -148,7 +240,7 @@ export default function ArchitectDocumentsPage() {
         setLoading(true);
         try {
             const [docsRes, projRes] = await Promise.allSettled([
-                apiClient.get('/api/project-documents'),
+                documentsAPI.getAll(),
                 projectsAPI.getAll(),
             ]);
             setDocuments(docsRes.value?.data?.data || []);
@@ -162,10 +254,10 @@ export default function ArchitectDocumentsPage() {
 
     useEffect(() => { fetchData(); }, []);
 
-    const handleCreate = async (form) => {
+    const handleCreate = async (form, file) => {
         setSaving(true);
         try {
-            await apiClient.post('/api/project-documents', form);
+            await documentsAPI.create(form);
             setShowCreate(false);
             setSuccess('Document submitted for admin review.');
             setTimeout(() => setSuccess(''), 4000);
@@ -209,7 +301,7 @@ export default function ArchitectDocumentsPage() {
                        value={search} onChange={e => setSearch(e.target.value)} />
                 <select className="filter-select" value={filterType} onChange={e => setFilterType(e.target.value)}>
                     <option value="">All Types</option>
-                    {DOC_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                    {DOC_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g, ' ')}</option>)}
                 </select>
                 <select className="filter-select" value={filterProject} onChange={e => setFilterProject(e.target.value)}>
                     <option value="">All Projects</option>
@@ -241,14 +333,14 @@ export default function ArchitectDocumentsPage() {
                                     <div className="cell-title">{d.title}</div>
                                     {d.fileName && <div className="cell-sub">{d.fileName}</div>}
                                 </td>
-                                <td><span className="type-badge">{d.documentType}</span></td>
+                                <td><span className="type-badge">{d.documentType?.replace(/_/g, ' ')}</span></td>
                                 <td>{d.projectCode ? <code className="code-badge">{d.projectCode}</code> : <span style={{ color: 'var(--text-muted)' }}>—</span>}</td>
                                 <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{formatFileSize(d.fileSizeBytes)}</td>
                                 <td>{d.publicVisible ? <span className="status-badge status-active">Yes</span> : <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>No</span>}</td>
                                 <td><span className={`status-badge ${d.active ? 'status-active' : 'status-pending'}`}>{d.active ? 'Active' : 'Pending'}</span></td>
                                 <td>
                                     <div className="action-btns">
-                                        {d.documentUrl && (
+                                        {d.documentUrl && !d.documentUrl.startsWith('uploaded://') && (
                                             <a href={d.documentUrl} target="_blank" rel="noreferrer" className="action-btn" title="View document"
                                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>↗</a>
                                         )}

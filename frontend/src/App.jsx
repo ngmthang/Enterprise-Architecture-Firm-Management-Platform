@@ -32,6 +32,7 @@ import ArchitectProjectsPage from './pages/architect/ArchitectProjectsPage';
 import ArchitectDocumentsPage from './pages/architect/ArchitectDocumentsPage';
 import ArchitectTeamPage from './pages/architect/ArchitectTeamPage';
 import ArchitectExpensesPage from './pages/architect/ArchitectExpensesPage';
+import ArchitectNotificationsPage from './pages/architect/ArchitectNotificationsPage';
 import ClientDashboard from './pages/client/ClientDashboard';
 import ClientProjectsPage from './pages/client/ClientProjectsPage';
 import ClientQuotationsPage from './pages/client/ClientQuotationsPage';
@@ -88,6 +89,7 @@ export default function App() {
             <Route path="documents" element={<ArchitectDocumentsPage />} />
             <Route path="team" element={<ArchitectTeamPage />} />
             <Route path="expenses" element={<ArchitectExpensesPage />} />
+            <Route path="notifications" element={<ArchitectNotificationsPage />} />
           </Route>
 
           {/* Client */}

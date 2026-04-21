@@ -16,6 +16,9 @@ const navItems = [
     { section: 'Finance', items: [
             { path: '/architect/expenses', label: 'Expenses', icon: '▽' },
         ]},
+    { section: 'Inbox', items: [
+            { path: '/architect/notifications', label: 'Notifications', icon: '◉' },
+        ]},
 ];
 
 export default function ArchitectLayout() {
@@ -23,6 +26,7 @@ export default function ArchitectLayout() {
     const navigate = useNavigate();
     const { user, logout } = useAuthStore();
     const [collapsed, setCollapsed] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     const handleLogout = () => { logout(); navigate('/login'); };
 
@@ -53,11 +57,22 @@ export default function ArchitectLayout() {
                         <div key={section.section} className="nav-section">
                             {!collapsed && <span className="nav-section-label">{section.section}</span>}
                             {section.items.map((item) => (
-                                <Link key={item.path} to={item.path}
-                                      className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-                                      title={collapsed ? item.label : ''}>
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
+                                    title={collapsed ? item.label : ''}
+                                >
                                     <span className="nav-icon">{item.icon}</span>
                                     {!collapsed && <span className="nav-label">{item.label}</span>}
+                                    {item.path === '/architect/notifications' && unreadCount > 0 && (
+                                        <span style={{
+                                            marginLeft: 'auto', background: '#ef4444', color: '#fff',
+                                            borderRadius: '50%', width: 18, height: 18, fontSize: '0.65rem',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontFamily: 'var(--font-mono)', flexShrink: 0,
+                                        }}>{unreadCount}</span>
+                                    )}
                                 </Link>
                             ))}
                         </div>
@@ -68,7 +83,7 @@ export default function ArchitectLayout() {
                         <div className="user-avatar">{user?.email?.charAt(0).toUpperCase() || 'A'}</div>
                         {!collapsed && (
                             <div className="user-info">
-                                <span className="user-name">{user?.email}</span>
+                                <span className="user-name">{user?.fullname || user?.email}</span>
                                 <span className="user-role">Architect</span>
                             </div>
                         )}
@@ -76,7 +91,9 @@ export default function ArchitectLayout() {
                     <button className="logout-btn" onClick={handleLogout} title="Sign out">⏻</button>
                 </div>
             </aside>
-            <main className="admin-main"><Outlet /></main>
+            <main className="admin-main">
+                <Outlet context={{ setUnreadCount }} />
+            </main>
         </div>
     );
 }
