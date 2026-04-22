@@ -13,10 +13,11 @@ spring:
       ddl-auto: update
 
   flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
-    out-of-order: false
+    flyway:
+      enabled: true
+      locations: classpath:db/migration
+      baseline-on-migrate: false    # ← change true to false
+      out-of-order: false
 
 logging:
   level:
@@ -32,6 +33,6 @@ app:
 
 springdoc:
   api-docs:
-    enabled: true
+    enabled: false
   swagger-ui:
-    enabled: true
+    enabled: false

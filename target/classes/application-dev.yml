@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/architecture_platform
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.flywaydb: INFO
+
+app:
+  cors:
+    allowed-origins: "http://localhost:3000,http://localhost:5173"
+
+  jwt:
+    secret: canarchitecturemejwtsecretkey2026verylongsecure123
