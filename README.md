@@ -82,30 +82,38 @@ CAN Architecture Platform connects three types of users — clients, architects,
 ---
 
 ## Architecture
-├── frontend/          # React + Vite application
+
+```
+Enterprise-Architecture-Firm-Management-Platform/
+├── frontend/                          # React + Vite application
 │   ├── src/
-│   │   ├── api/       # Axios client and service methods
-│   │   ├── components/# Layout components per role
-│   │   ├── pages/     # Public, admin, architect, client pages
-│   │   └── store/     # Zustand auth store
+│   │   ├── api/                       # Axios client and service methods
+│   │   ├── components/                # Layout components per role
+│   │   ├── pages/                     # Public, admin, architect, client pages
+│   │   └── store/                     # Zustand auth store
+│   ├── Dockerfile
+│   └── vercel.json
+│
+├── backend/                           # Spring Boot application
+│   ├── src/main/java/com/example/architectureplatform/
+│   │   ├── auth/                      # JWT authentication
+│   │   ├── project/                   # Project management
+│   │   ├── invoice/                   # Invoice management
+│   │   ├── quotation/                 # Quotation management
+│   │   ├── contract/                  # Contract management
+│   │   ├── payment/                   # Payment tracking
+│   │   ├── expense/                   # Expense management
+│   │   ├── consultation/              # Consultation requests
+│   │   ├── notification/              # Notification system
+│   │   ├── team/                      # Team member management
+│   │   ├── portfolio/                 # Portfolio projects
+│   │   └── user/                      # User management
 │   └── Dockerfile
-├── backend/           # Spring Boot application
-│   ├── src/
-│   │   └── main/java/com/example/architectureplatform/
-│   │       ├── auth/          # JWT authentication
-│   │       ├── project/       # Project management
-│   │       ├── invoice/       # Invoice management
-│   │       ├── quotation/     # Quotation management
-│   │       ├── contract/      # Contract management
-│   │       ├── payment/       # Payment tracking
-│   │       ├── expense/       # Expense management
-│   │       ├── consultation/  # Consultation requests
-│   │       ├── notification/  # Notification system
-│   │       ├── team/          # Team member management
-│   │       ├── portfolio/     # Portfolio projects
-│   │       └── user/          # User management
-│   └── Dockerfile
-└── docker-compose.yml # Local development setup
+│
+├── docker-compose.yml                 # Local development setup
+└── .env.example                       # Environment variables template
+```
+
 ---
 
 ## Role-Based Access Control
