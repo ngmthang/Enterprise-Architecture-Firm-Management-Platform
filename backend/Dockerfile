@@ -1,4 +1,4 @@
-# Stage 1: Build inside Docker
+# Stage 1: Build
 FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 COPY pom.xml .
